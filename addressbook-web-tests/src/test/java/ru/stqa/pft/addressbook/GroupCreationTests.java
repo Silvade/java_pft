@@ -1,44 +1,28 @@
 package ru.stqa.pft.addressbook;
 
-import java.util.concurrent.TimeUnit;
-
 import org.testng.annotations.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class GroupCreationTests
 {
     private WebDriver wd;
+    private TestConfiguration tc;
 
     @BeforeMethod(alwaysRun = true)
     public void setUp() throws Exception
     {
-        wd = new FirefoxDriver();
-        wd.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        wd.get("http://localhost/addressbook/");
-        login("admin", "secret");
-    }
-
-    private void login(String username, String password)
-    {
-        wd.findElement(By.name("user")).click();
-        wd.findElement(By.name("user")).clear();
-        wd.findElement(By.name("user")).sendKeys(username);
-        wd.findElement(By.id("LoginForm")).click();
-        wd.findElement(By.name("pass")).click();
-        wd.findElement(By.name("pass")).clear();
-        wd.findElement(By.name("pass")).sendKeys(password);
-        wd.findElement(By.xpath("(.//*[normalize-space(text()) and normalize-space(.)='Password:'])[1]/following::input[2]")).click();
+        tc = new TestConfiguration();
+        wd = tc.setUp();
     }
 
     @Test
     public void testGroupCreation() throws Exception
     {
-        gotoPage("groups");
+        Util.gotoPage(wd, "groups");
         initGroupCreation();
         fillGroupForm(new GroupData("test", "test1", "test2"));
         submitGroupCreation();
-        gotoPage("groups");
+        Util.gotoPage(wd, "groups");
     }
 
     private void submitGroupCreation()
@@ -62,16 +46,10 @@ public class GroupCreationTests
         wd.findElement(By.name("new")).click();
     }
 
-    private void gotoPage(String page)
-    {
-        wd.findElement(By.linkText(page)).click();
-    }
-
     @AfterMethod(alwaysRun = true)
     public void tearDown() throws Exception
     {
-        gotoPage("Logout");
-        wd.quit();
+        tc.tearDown();
     }
 
     private boolean isElementPresent(By by)
