@@ -1,39 +1,20 @@
-package ru.stqa.pft.addressbook;
+package ru.stqa.pft.addressbook.appmanager;
 
-import org.testng.annotations.*;
-
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
+import ru.stqa.pft.addressbook.model.ContactData;
 
-public class ContactCreationTests
+public class ContactHelper
 {
     private WebDriver wd;
-    private TestConfiguration tc;
 
-    @BeforeMethod(alwaysRun = true)
-    public void setUp() throws Exception
+    public ContactHelper(WebDriver wd)
     {
-        tc = new TestConfiguration();
-        wd = tc.setUp();
+        this.wd = wd;
     }
 
-    @Test
-    public void testContactCreation() throws Exception
-    {
-        Util.gotoPage(wd, "add new");
-        fillContactForm(new ContactData("Aleksandr", "Sergeyevich", "Golovin", "Chick",
-                "C:\\Users\\Maria\\Pictures\\Aleksandr_Golovin.jpg",
-                "Footballer", "AS Monaco FC", "Stade Louis II, Fontvielle, Monaco",
-                "472-890", "88002253535", "123456", "654321",
-                "mail@mail.ru", "mail1@mail.ru", "mail2@mail.ru", "www.asmonaco.com",
-                "30", "May", "1996",
-                "27", "July", "2018",
-                "Test1", "Kaltan, Russia", "2-10-64",
-                "He played for PFC CSKA Moscow."));
-        submitContactCreation();
-    }
-
-    private void fillContactForm(ContactData contactData)
+    public void fillContactForm(ContactData contactData)
     {
         wd.findElement(By.name("firstname")).click();
         wd.findElement(By.name("firstname")).clear();
@@ -98,40 +79,8 @@ public class ContactCreationTests
         wd.findElement(By.name("notes")).sendKeys(contactData.getNotes());
     }
 
-    private void submitContactCreation()
+    public void submitContactCreation()
     {
         wd.findElement(By.xpath("(//input[@name='submit'])[2]")).click();
-    }
-
-    @AfterMethod(alwaysRun = true)
-    public void tearDown() throws Exception
-    {
-        tc.tearDown();
-    }
-
-    private boolean isElementPresent(By by)
-    {
-        try
-        {
-            wd.findElement(by);
-            return true;
-        }
-        catch (NoSuchElementException e)
-        {
-            return false;
-        }
-    }
-
-    private boolean isAlertPresent()
-    {
-        try
-        {
-            wd.switchTo().alert();
-            return true;
-        }
-        catch (NoAlertPresentException e)
-        {
-            return false;
-        }
     }
 }

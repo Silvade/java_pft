@@ -1,17 +1,18 @@
-package ru.stqa.pft.addressbook;
+package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class Util
+public class SessionHelper
 {
+    private WebDriver wd;
 
-    public static void gotoPage(WebDriver wd, String page)
+    public SessionHelper(WebDriver wd)
     {
-        wd.findElement(By.linkText(page)).click();
+        this.wd = wd;
     }
 
-    static void login(WebDriver wd, String username, String password)
+    public void login(String username, String password)
     {
         wd.findElement(By.name("user")).click();
         wd.findElement(By.name("user")).clear();
