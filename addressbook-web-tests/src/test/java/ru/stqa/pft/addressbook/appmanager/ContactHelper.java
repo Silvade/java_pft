@@ -93,4 +93,17 @@ public class ContactHelper extends BaseHelper
     {
         click(By.xpath("(//input[@name='update'])[2]"));
     }
+
+    public void selectGroups(String[] contactNumber)
+    {
+        for(int i = 0; i < contactNumber.length; ++i)
+        {
+            click(By.id(contactNumber[i]));
+        }
+    }
+
+    public void deleteSelectedContacts()
+    {
+        click(By.xpath("//input[@value='Delete']"));
+    }
 }
