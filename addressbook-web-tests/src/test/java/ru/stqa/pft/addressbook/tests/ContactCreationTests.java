@@ -21,4 +21,10 @@ public class ContactCreationTests extends TestBase
         app.getContactHelper().submitContactCreation();
     }
 
+    @Test
+    public void testEmptyContactCreation() throws Exception
+    {
+        app.getNavigationHelper().gotoPage("add new");
+        app.getContactHelper().submitContactCreation();
+    }
 }

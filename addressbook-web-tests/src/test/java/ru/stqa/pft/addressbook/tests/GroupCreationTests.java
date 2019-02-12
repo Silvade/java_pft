@@ -14,4 +14,13 @@ public class GroupCreationTests extends TestBase
         app.getGroupHelper().submitGroupCreation();
         app.getNavigationHelper().gotoPage("groups");
     }
+
+    @Test
+    public void testEmptyGroupCreation()
+    {
+        app.getNavigationHelper().gotoPage("groups");
+        app.getGroupHelper().initGroupCreation();
+        app.getGroupHelper().submitGroupCreation();
+        app.getNavigationHelper().gotoPage("groups");
+    }
 }
