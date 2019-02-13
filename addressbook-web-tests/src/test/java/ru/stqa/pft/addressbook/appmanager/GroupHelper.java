@@ -48,12 +48,4 @@ public class GroupHelper extends BaseHelper
     {
         click(By.name("update"));
     }
-
-    public void selectGroups(int[] groupNumbers)
-    {
-        for(int i = 0; i < groupNumbers.length; ++i)
-        {
-            click(By.xpath("(//input[@name='selected[]'])[" + groupNumbers[i] + "]"));
-        }
-    }
 }

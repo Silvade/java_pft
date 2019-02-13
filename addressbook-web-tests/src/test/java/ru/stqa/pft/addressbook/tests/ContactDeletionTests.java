@@ -8,8 +8,7 @@ public class ContactDeletionTests extends TestBase
     public void testContactDeletion() throws Exception
     {
         app.getNavigationHelper().gotoPage("home");
-        String[] contactNumbers = new String[]{"23"};
-        app.getContactHelper().selectGroups(contactNumbers);
+        app.getContactHelper().selectContact();
         app.getContactHelper().deleteSelectedContacts();
         app.getNavigationHelper().clickAlert();
     }
@@ -18,8 +17,7 @@ public class ContactDeletionTests extends TestBase
     public void testAllContactsDeletion() throws Exception
     {
         app.getNavigationHelper().gotoPage("home");
-        String[] contactNumbers = new String[]{"MassCB"};
-        app.getContactHelper().selectGroups(contactNumbers);
+        app.getContactHelper().selectAllContacts();
         app.getContactHelper().deleteSelectedContacts();
         app.getNavigationHelper().clickAlert();
     }

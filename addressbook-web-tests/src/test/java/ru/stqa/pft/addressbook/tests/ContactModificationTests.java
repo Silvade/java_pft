@@ -10,7 +10,7 @@ public class ContactModificationTests extends TestBase
     public void testContactModification()
     {
         app.getNavigationHelper().gotoPage("home");
-        app.getContactHelper().initContactModification(3);
+        app.getContactHelper().initContactModification();
         ContactData cd = new ContactData("Fyodor", "Nikolayevich", "Chalov", "Esthete",
                 "C:\\Users\\Maria\\Pictures\\chalov.jpg", "", "PFC CSKA Moscow", "Russia, Moscow, VEB Arena",
                 "89999999999", "", "", "", "f@c.ru", "", "",
@@ -26,7 +26,7 @@ public class ContactModificationTests extends TestBase
     public void testClearContact()
     {
         app.getNavigationHelper().gotoPage("home");
-        app.getContactHelper().initContactModification(4);
+        app.getContactHelper().initContactModification();
         ContactData cd = new ContactData("", "", "", "",
                 "", "", "", "",
                 "", "", "", "", "", "", "",

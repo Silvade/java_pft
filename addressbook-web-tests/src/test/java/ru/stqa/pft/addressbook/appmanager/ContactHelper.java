@@ -83,10 +83,9 @@ public class ContactHelper extends BaseHelper
         click(By.xpath("(//input[@name='submit'])[2]"));
     }
 
-    public void initContactModification(int number)
+    public void initContactModification()
     {
-        click(By.id("logo"));
-        click(By.xpath("(//img[@alt='Edit'])[" + number + "]"));
+        click(By.xpath("//img[@alt='Edit']"));
     }
 
     public void submitContactModification()
@@ -94,16 +93,18 @@ public class ContactHelper extends BaseHelper
         click(By.xpath("(//input[@name='update'])[2]"));
     }
 
-    public void selectGroups(String[] contactNumber)
+    public void selectAllContacts()
     {
-        for(int i = 0; i < contactNumber.length; ++i)
-        {
-            click(By.id(contactNumber[i]));
-        }
+        click(By.id("MassCB"));
     }
 
     public void deleteSelectedContacts()
     {
         click(By.xpath("//input[@value='Delete']"));
+    }
+
+    public void selectContact()
+    {
+        click(By.name("selected[]"));
     }
 }
