@@ -80,4 +80,9 @@ public class GroupHelper extends BaseHelper
             return false;
         }
     }
+
+    public int getGroupCounter()
+    {
+        return wd.findElements(By.name("selected[]")).size();
+    }
 }
