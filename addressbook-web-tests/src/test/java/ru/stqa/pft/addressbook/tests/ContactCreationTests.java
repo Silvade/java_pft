@@ -1,14 +1,20 @@
 package ru.stqa.pft.addressbook.tests;
 
+import org.testng.Assert;
 import org.testng.annotations.*;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
+
+import java.util.Comparator;
+import java.util.List;
 
 public class ContactCreationTests extends TestBase
 {
     @Test
     public void testContactCreation() throws Exception
     {
+        app.getNavigationHelper().gotoHomePage();
+        List<ContactData> before = app.getContactHelper().getContactList();
         app.getNavigationHelper().gotoNewContactPage();
         ContactData cd = new ContactData("Aleksandr", "Sergeyevich", "Golovin", "Chick",
                 "C:\\Users\\Maria\\Pictures\\Aleksandr_Golovin.jpg",
@@ -27,6 +33,17 @@ public class ContactCreationTests extends TestBase
             app.getNavigationHelper().gotoNewContactPage();
         }
         app.getContactHelper().createContact(cd);
+
+        app.getNavigationHelper().gotoHomePage();
+        List<ContactData> after = app.getContactHelper().getContactList();
+        Assert.assertEquals(before.size() + 1, after.size());
+
+        before.add(cd);
+
+        Comparator<? super ContactData> byId = Comparator.comparingInt(ContactData::getId);
+        before.sort(byId);
+        after.sort(byId);
+        Assert.assertEquals(before, after);
     }
 
     @Test

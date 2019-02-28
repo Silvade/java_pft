@@ -1,7 +1,10 @@
 package ru.stqa.pft.addressbook.model;
 
+import java.util.Objects;
+
 public class ContactData
 {
+    private final int id;
     private final String firstName;
     private final String middleName;
     private final String lastName;
@@ -29,7 +32,7 @@ public class ContactData
     private final String phone2;
     private final String notes;
 
-    public ContactData(String firstName, String middleName, String lastName, String nickname, String photoPath,
+    public ContactData(int id, String firstName, String middleName, String lastName, String nickname, String photoPath,
                        String title, String company, String address,
                        String homePhone, String mobilePhone, String workPhone, String fax,
                        String email1, String email2, String email3, String homepage,
@@ -37,6 +40,7 @@ public class ContactData
                        String dayOfAnniversary, String monthOfAnniversary, String yearOfAnniversary,
                        String groupName, String address2, String phone2, String notes)
     {
+        this.id = id;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -65,6 +69,70 @@ public class ContactData
         this.notes = notes;
     }
 
+    public ContactData(String firstName, String middleName, String lastName, String nickname, String photoPath,
+                       String title, String company, String address,
+                       String homePhone, String mobilePhone, String workPhone, String fax,
+                       String email1, String email2, String email3, String homepage,
+                       String dayOfBirthday, String monthOfBirthday, String yearOfBirthday,
+                       String dayOfAnniversary, String monthOfAnniversary, String yearOfAnniversary,
+                       String groupName, String address2, String phone2, String notes)
+    {
+        this.id = Integer.MAX_VALUE;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.nickname = nickname;
+        this.photoPath = photoPath;
+        this.title = title;
+        this.company = company;
+        this.address = address;
+        this.homePhone = homePhone;
+        this.mobilePhone = mobilePhone;
+        this.workPhone = workPhone;
+        this.fax = fax;
+        this.email1 = email1;
+        this.email2 = email2;
+        this.email3 = email3;
+        this.homepage = homepage;
+        this.dayOfBirthday = dayOfBirthday;
+        this.monthOfBirthday = monthOfBirthday;
+        this.yearOfBirthday = yearOfBirthday;
+        this.dayOfAnniversary = dayOfAnniversary;
+        this.monthOfAnniversary = monthOfAnniversary;
+        this.yearOfAnniversary = yearOfAnniversary;
+        this.groupName = groupName;
+        this.address2 = address2;
+        this.phone2 = phone2;
+        this.notes = notes;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContactData that = (ContactData) o;
+        return id == that.id &&
+                Objects.equals(firstName, that.firstName) &&
+                Objects.equals(lastName, that.lastName);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, firstName, lastName);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "ContactData{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
+
     public String getFirstName()
     {
         return firstName;
@@ -88,6 +156,11 @@ public class ContactData
     public String getPhotoPath()
     {
         return photoPath;
+    }
+
+    public int getId()
+    {
+        return id;
     }
 
     public String getTitle()

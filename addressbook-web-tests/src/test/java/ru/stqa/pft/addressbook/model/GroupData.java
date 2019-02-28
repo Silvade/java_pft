@@ -59,7 +59,6 @@ public class GroupData
                 '}';
     }
 
-
     @Override
     public boolean equals(Object o)
     {

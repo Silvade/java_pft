@@ -1,8 +1,11 @@
 package ru.stqa.pft.addressbook.tests;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
+import java.util.Comparator;
+import java.util.List;
 
 public class ContactModificationTests extends TestBase
 {
@@ -24,8 +27,10 @@ public class ContactModificationTests extends TestBase
             app.getNavigationHelper().gotoNewContactPage();
             app.getContactHelper().createContact(cd);
         }
-        app.getContactHelper().initContactModification();
-        ContactData cd = new ContactData("Fyodor", "Nikolayevich", "Chalov", "Esthete",
+        app.getNavigationHelper().gotoHomePage();
+        List<ContactData> before = app.getContactHelper().getContactList();
+        app.getContactHelper().initContactModification(before.size() - 1);
+        ContactData cd = new ContactData(before.get(before.size() - 1).getId(), "Fyodor", "Nikolayevich", "Chalov", "Esthete",
                 "C:\\Users\\Maria\\Pictures\\chalov.jpg", "", "PFC CSKA Moscow", "Russia, Moscow, VEB Arena",
                 "89999999999", "", "", "", "f@c.ru", "", "",
                 "https://www.pfc-cska.com/", "10", "April", "1998",
@@ -37,11 +42,21 @@ public class ContactModificationTests extends TestBase
             app.getNavigationHelper().gotoGroupPage();
             app.getGroupHelper().createGroup(gd);
             app.getNavigationHelper().gotoHomePage();
-            app.getContactHelper().initContactModification();
+            app.getContactHelper().initContactModification(before.size() - 1);
         }
         app.getContactHelper().fillContactForm(cd, false);
         app.getContactHelper().submitContactModification();
         app.getNavigationHelper().gotoHomePage();
+        List<ContactData> after = app.getContactHelper().getContactList();
+        Assert.assertEquals(before.size(), after.size());
+
+        before.remove(before.size() - 1);
+        before.add(cd);
+
+        Comparator<? super ContactData> byId = Comparator.comparingInt(ContactData::getId);
+        before.sort(byId);
+        after.sort(byId);
+        Assert.assertEquals(before, after);
     }
 
     @Test
@@ -70,7 +85,8 @@ public class ContactModificationTests extends TestBase
             app.getContactHelper().createContact(cd);
         }
         app.getNavigationHelper().gotoHomePage();
-        app.getContactHelper().initContactModification();
+        List<ContactData> before = app.getContactHelper().getContactList();
+        app.getContactHelper().initContactModification(before.size() - 1);
         ContactData cd = new ContactData("", "", "", "",
                 null, "", "", "",
                 "", "", "", "", "", "", "",
