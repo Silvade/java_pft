@@ -22,13 +22,4 @@ public class GroupCreationTests extends TestBase
         assertThat(after, equalTo(
                 before.withAdded(group.withId(after.stream().mapToInt(GroupData::getId).max().getAsInt()))));
     }
-
-    @Test
-    public void testEmptyGroupCreation()
-    {
-        app.goTo().groupPage();
-        app.group().initGroupCreation();
-        app.group().submitGroupCreation();
-        app.goTo().groupPage();
-    }
 }

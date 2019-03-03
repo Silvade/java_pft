@@ -5,9 +5,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
-
-import java.util.ArrayList;
+import ru.stqa.pft.addressbook.model.Contacts;
 import java.util.List;
+
+import static java.lang.Integer.parseInt;
 
 public class ContactHelper extends BaseHelper
 {
@@ -15,6 +16,56 @@ public class ContactHelper extends BaseHelper
     public ContactHelper(WebDriver wd)
     {
         super(wd);
+    }
+
+    public void createContact(ContactData cd)
+    {
+        fillContactForm(cd, true);
+        submitContactCreation();
+    }
+
+    public Contacts all()
+    {
+        Contacts contacts = new Contacts();
+        List<WebElement> elements = wd.findElements(By.name("entry"));
+        for(WebElement e : elements)
+        {
+            List<WebElement> contactData = e.findElements(By.tagName("td"));
+            ContactData cd = new ContactData()
+                    .withId(parseInt(contactData.get(0).findElement(By.tagName("input")).getAttribute("value")))
+                    .withLastName(contactData.get(1).getText()).withFirstName(contactData.get(2).getText());
+
+            contacts.add(cd);
+        }
+
+        return contacts;
+    }
+
+    public void selectContactById(int id)
+    {
+        List<WebElement> elements = wd.findElements(By.name("entry"));
+        for(WebElement e : elements)
+        {
+            WebElement checkbox = e.findElements(By.tagName("td")).get(0).findElement(By.tagName("input"));
+
+            if(id == parseInt(checkbox.getAttribute("value")))
+            {
+                checkbox.click();
+                return;
+            }
+        }
+    }
+
+    public void modify(ContactData contact)
+    {
+        initContactModificationById(contact.getId());
+        fillContactForm(contact, false);
+        submitContactModification();
+    }
+    public void delete(ContactData contact)
+    {
+        selectContactById(contact.getId());
+        deleteSelectedContacts();
     }
 
     public void fillContactForm(ContactData contactData, boolean creation)
@@ -76,10 +127,20 @@ public class ContactHelper extends BaseHelper
         click(By.xpath("(//input[@name='submit'])[2]"));
     }
 
-    public void initContactModification(int index)
+    public void initContactModificationById(int id)
     {
         List<WebElement> elements = wd.findElements(By.name("entry"));
-        elements.get(index).findElements(By.tagName("td")).get(7).click();
+        for(WebElement e : elements)
+        {
+            List<WebElement> row = e.findElements(By.tagName("td"));
+            WebElement checkbox = row.get(0).findElement(By.tagName("input"));
+
+            if(id == parseInt(checkbox.getAttribute("value")))
+            {
+                row.get(7).click();
+                return;
+            }
+        }
     }
 
     public void submitContactModification()
@@ -97,39 +158,8 @@ public class ContactHelper extends BaseHelper
         click(By.xpath("//input[@value='Delete']"));
     }
 
-    public void selectContact(int index)
-    {
-        List<WebElement> elements = wd.findElements(By.name("entry"));
-        elements.get(index).findElements(By.tagName("td")).get(0).click();
-    }
-
     public boolean isThereAContact()
     {
         return isElementPresent(By.name("selected[]"));
-    }
-
-    public void createContact(ContactData cd)
-    {
-        fillContactForm(cd, true);
-        submitContactCreation();
-    }
-
-    public List<ContactData> getContactList()
-    {
-        List<ContactData> contacts = new ArrayList<>();
-        List<WebElement> elements = wd.findElements(By.name("entry"));
-        for(WebElement e : elements)
-        {
-            List<WebElement> contactData = e.findElements(By.tagName("td"));
-            ContactData cd = new ContactData(contactData.get(2).getText(), null, contactData.get(1).getText(), null, null,
-                    null, null, null, null, null, null,
-                    null, null, null, null, null,
-                    null, null, null, null, null,
-                    null, null, null, null, null);
-
-            contacts.add(cd);
-        }
-
-        return contacts;
     }
 }

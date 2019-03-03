@@ -1,100 +1,66 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
-import java.util.Comparator;
-import java.util.List;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactModificationTests extends TestBase
 {
-    @Test(enabled = false)
-    public void testContactModification()
+    @BeforeMethod
+    public void ensurePreconditions()
     {
         app.goTo().homePage();
-        if(!app.getContactHelper().isThereAContact())
+        if(app.contact().all().size() == 0)
         {
-            ContactData cd = new ContactData("Aleksandr", "Sergeyevich", "Golovin", "Chick",
-                    "C:\\Users\\Maria\\Pictures\\Aleksandr_Golovin.jpg",
-                    "Footballer", "AS Monaco FC", "Stade Louis II, Fontvielle, Monaco",
-                    "472-890", "88002253535", "123456", "654321",
-                    "mail@mail.ru", "mail1@mail.ru", "mail2@mail.ru", "www.asmonaco.com",
-                    "30", "May", "1996",
-                    "27", "July", "2018",
-                    null, "Kaltan, Russia", "2-10-64",
-                    "He played for PFC CSKA Moscow.");
+            ContactData cd = new ContactData().withFirstName("Aleksandr").withMiddleName("Sergeyevich").withLastName("Golovin").withNickname("Chick")
+                    .withPhotoPath("C:\\Users\\Maria\\Pictures\\Aleksandr_Golovin.jpg").withTitle("Footballer")
+                    .withCompany("AS Monaco FC").withAddress("Stade Louis II, Fontvielle, Monaco")
+                    .withHomePhone("472-890").withMobilePhone("88002253535").withWorkPhone("123456").withFax("654321")
+                    .withEmail1("mail@mail.ru").withEmail2("mail1@mail.ru").withEmail3("mail2@mail.ru")
+                    .withHomepage("www.asmonaco.com").withDayOfBirthday("30").withMonthOfBirthday("May").withYearOfBirthday("1996")
+                    .withDayOfAnniversary("27").withMonthOfAnniversary("July").withYearOfAnniversary("2018")
+                    .withAddress2("Kaltan, Russia").withPhone2("2-10-64").withNotes("He played for PFC CSKA Moscow.");
+
             app.goTo().newContactPage();
-            app.getContactHelper().createContact(cd);
+            app.contact().createContact(cd);
         }
-        app.goTo().homePage();
-        List<ContactData> before = app.getContactHelper().getContactList();
-        app.getContactHelper().initContactModification(before.size() - 1);
-        ContactData cd = new ContactData(before.get(before.size() - 1).getId(), "Fyodor", "Nikolayevich", "Chalov", "Esthete",
-                "C:\\Users\\Maria\\Pictures\\chalov.jpg", "", "PFC CSKA Moscow", "Russia, Moscow, VEB Arena",
-                "89999999999", "", "", "", "f@c.ru", "", "",
-                "https://www.pfc-cska.com/", "10", "April", "1998",
-                "21", "September", "2016", "Joker","Moscow",
-                "", "The best footballer of Russia in 2017");
-        if(!app.group().isThereAGroupByName(cd.getGroupName()) && cd.getGroupName() != null)
-        {
-            GroupData gd = new GroupData().withName(cd.getGroupName());
-            app.goTo().groupPage();
-            app.group().create(gd);
-            app.goTo().homePage();
-            app.getContactHelper().initContactModification(before.size() - 1);
-        }
-        app.getContactHelper().fillContactForm(cd, false);
-        app.getContactHelper().submitContactModification();
-        app.goTo().homePage();
-        List<ContactData> after = app.getContactHelper().getContactList();
-        Assert.assertEquals(before.size(), after.size());
-
-        before.remove(before.size() - 1);
-        before.add(cd);
-
-        Comparator<? super ContactData> byId = Comparator.comparingInt(ContactData::getId);
-        before.sort(byId);
-        after.sort(byId);
-        Assert.assertEquals(before, after);
     }
 
-    @Test(enabled = false)
-    public void testClearContact()
+    public void ensurePreconditions(String group)
     {
-        app.goTo().homePage();
-        if(!app.getContactHelper().isThereAContact())
+        app.goTo().groupPage();
+        if(!app.group().isThereAGroupByName(group))
         {
-            ContactData cd = new ContactData("Aleksandr", "Sergeyevich", "Golovin", "Chick",
-                    "C:\\Users\\Maria\\Pictures\\Aleksandr_Golovin.jpg",
-                    "Footballer", "AS Monaco FC", "Stade Louis II, Fontvielle, Monaco",
-                    "472-890", "88002253535", "123456", "654321",
-                    "mail@mail.ru", "mail1@mail.ru", "mail2@mail.ru", "www.asmonaco.com",
-                    "30", "May", "1996",
-                    "27", "July", "2018",
-                    "Test3", "Kaltan, Russia", "2-10-64",
-                    "He played for PFC CSKA Moscow.");
-            app.goTo().newContactPage();
-            if(!app.group().isThereAGroupByName(cd.getGroupName()) && cd.getGroupName() != null)
-            {
-                GroupData gd = new GroupData().withName(cd.getGroupName());
-                app.goTo().groupPage();
-                app.group().create(gd);
-                app.goTo().newContactPage();
-            }
-            app.getContactHelper().createContact(cd);
+            GroupData gd = new GroupData().withName(group);
+            app.group().create(gd);
         }
+    }
+
+    @Test
+    public void testContactModification()
+    {
+        Contacts before = app.contact().all();
+        ContactData modifiedContact = before.iterator().next();
+        ContactData cd = new ContactData().withId(modifiedContact.getId())
+                .withFirstName("Fyodor").withMiddleName("Nikolayevich").withLastName("Chalov").withNickname("Esthete")
+                .withPhotoPath("C:\\Users\\Maria\\Pictures\\chalov.jpg").withCompany("PFC CSKA Moscow")
+                .withAddress("Russia, Moscow, VEB Arena").withMobilePhone("89999999999")
+                .withEmail1("f@c.ru").withHomepage("https://www.pfc-cska.com/")
+                .withDayOfBirthday("10").withMonthOfBirthday("April").withYearOfBirthday("1998")
+                .withDayOfAnniversary("21").withMonthOfAnniversary("September").withYearOfAnniversary("2016")
+                .withGroupName("Joker").withAddress2("Moscow").withNotes("The best footballer of Russia in 2017");
+        ensurePreconditions(cd.getGroupName());
         app.goTo().homePage();
-        List<ContactData> before = app.getContactHelper().getContactList();
-        app.getContactHelper().initContactModification(before.size() - 1);
-        ContactData cd = new ContactData("", "", "", "",
-                null, "", "", "",
-                "", "", "", "", "", "", "",
-                "", "-", "-", "",
-                "-", "-", "", null,"",
-                "", "");
-        app.getContactHelper().fillContactForm(cd, false);
-        app.getContactHelper().submitContactModification();
+        app.contact().modify(cd);
         app.goTo().homePage();
+        Contacts after = app.contact().all();
+        assertThat(after.size(), equalTo(before.size()));
+
+        assertThat(after, equalTo(before.without(modifiedContact).withAdded(cd)));
     }
 }

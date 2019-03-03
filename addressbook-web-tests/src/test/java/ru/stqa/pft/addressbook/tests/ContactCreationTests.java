@@ -1,55 +1,47 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.*;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 
-import java.util.Comparator;
-import java.util.List;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactCreationTests extends TestBase
 {
-    @Test(enabled = false)
+    public void ensurePreconditions(String group)
+    {
+        app.goTo().groupPage();
+        if(!app.group().isThereAGroupByName(group))
+        {
+            GroupData gd = new GroupData().withName(group);
+            app.group().create(gd);
+        }
+    }
+
+    @Test
     public void testContactCreation() throws Exception
     {
         app.goTo().homePage();
-        List<ContactData> before = app.getContactHelper().getContactList();
+        Contacts before = app.contact().all();
+        ContactData cd = new ContactData().withFirstName("Aleksandr").withMiddleName("Sergeyevich").withLastName("Golovin").withNickname("Chick")
+                .withPhotoPath("C:\\Users\\Maria\\Pictures\\Aleksandr_Golovin.jpg").withTitle("Footballer")
+                .withCompany("AS Monaco FC").withAddress("Stade Louis II, Fontvielle, Monaco")
+                .withHomePhone("472-890").withMobilePhone("88002253535").withWorkPhone("123456").withFax("654321")
+                .withEmail1("mail@mail.ru").withEmail2("mail1@mail.ru").withEmail3("mail2@mail.ru")
+                .withHomepage("www.asmonaco.com").withDayOfBirthday("30").withMonthOfBirthday("May").withYearOfBirthday("1996")
+                .withDayOfAnniversary("27").withMonthOfAnniversary("July").withYearOfAnniversary("2018")
+                .withGroupName("Test1").withAddress2("Kaltan, Russia").withPhone2("2-10-64").withNotes("He played for PFC CSKA Moscow.");
+        ensurePreconditions(cd.getGroupName());
         app.goTo().newContactPage();
-        ContactData cd = new ContactData("Aleksandr", "Sergeyevich", "Golovin", "Chick",
-                "C:\\Users\\Maria\\Pictures\\Aleksandr_Golovin.jpg",
-                "Footballer", "AS Monaco FC", "Stade Louis II, Fontvielle, Monaco",
-                "472-890", "88002253535", "123456", "654321",
-                "mail@mail.ru", "mail1@mail.ru", "mail2@mail.ru", "www.asmonaco.com",
-                "30", "May", "1996",
-                "27", "July", "2018",
-                "Test1", "Kaltan, Russia", "2-10-64",
-                "He played for PFC CSKA Moscow.");
-        if(!app.group().isThereAGroupByName(cd.getGroupName()) && cd.getGroupName() != null)
-        {
-            GroupData gd = new GroupData().withName(cd.getGroupName());
-            app.goTo().groupPage();
-            app.group().create(gd);
-            app.goTo().newContactPage();
-        }
-        app.getContactHelper().createContact(cd);
+        app.contact().createContact(cd);
 
         app.goTo().homePage();
-        List<ContactData> after = app.getContactHelper().getContactList();
-        Assert.assertEquals(before.size() + 1, after.size());
+        Contacts after = app.contact().all();
+        assertThat(after.size(), equalTo(before.size() + 1));
 
-        before.add(cd);
-
-        Comparator<? super ContactData> byId = Comparator.comparingInt(ContactData::getId);
-        before.sort(byId);
-        after.sort(byId);
-        Assert.assertEquals(before, after);
-    }
-
-    @Test(enabled = false)
-    public void testEmptyContactCreation() throws Exception
-    {
-        app.goTo().newContactPage();
-        app.getContactHelper().submitContactCreation();
+        assertThat(after, equalTo(
+                before.withAdded(cd.withId(after.stream().mapToInt(ContactData::getId).max().getAsInt()))));
     }
 }
