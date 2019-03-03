@@ -9,10 +9,10 @@ import java.util.List;
 
 public class ContactModificationTests extends TestBase
 {
-    @Test
+    @Test(enabled = false)
     public void testContactModification()
     {
-        app.getNavigationHelper().gotoHomePage();
+        app.goTo().homePage();
         if(!app.getContactHelper().isThereAContact())
         {
             ContactData cd = new ContactData("Aleksandr", "Sergeyevich", "Golovin", "Chick",
@@ -24,10 +24,10 @@ public class ContactModificationTests extends TestBase
                     "27", "July", "2018",
                     null, "Kaltan, Russia", "2-10-64",
                     "He played for PFC CSKA Moscow.");
-            app.getNavigationHelper().gotoNewContactPage();
+            app.goTo().newContactPage();
             app.getContactHelper().createContact(cd);
         }
-        app.getNavigationHelper().gotoHomePage();
+        app.goTo().homePage();
         List<ContactData> before = app.getContactHelper().getContactList();
         app.getContactHelper().initContactModification(before.size() - 1);
         ContactData cd = new ContactData(before.get(before.size() - 1).getId(), "Fyodor", "Nikolayevich", "Chalov", "Esthete",
@@ -36,17 +36,17 @@ public class ContactModificationTests extends TestBase
                 "https://www.pfc-cska.com/", "10", "April", "1998",
                 "21", "September", "2016", "Joker","Moscow",
                 "", "The best footballer of Russia in 2017");
-        if(!app.getGroupHelper().isThereAGroupByName(cd.getGroupName()) && cd.getGroupName() != null)
+        if(!app.group().isThereAGroupByName(cd.getGroupName()) && cd.getGroupName() != null)
         {
-            GroupData gd = new GroupData(cd.getGroupName(), null, null);
-            app.getNavigationHelper().gotoGroupPage();
-            app.getGroupHelper().createGroup(gd);
-            app.getNavigationHelper().gotoHomePage();
+            GroupData gd = new GroupData().withName(cd.getGroupName());
+            app.goTo().groupPage();
+            app.group().create(gd);
+            app.goTo().homePage();
             app.getContactHelper().initContactModification(before.size() - 1);
         }
         app.getContactHelper().fillContactForm(cd, false);
         app.getContactHelper().submitContactModification();
-        app.getNavigationHelper().gotoHomePage();
+        app.goTo().homePage();
         List<ContactData> after = app.getContactHelper().getContactList();
         Assert.assertEquals(before.size(), after.size());
 
@@ -59,10 +59,10 @@ public class ContactModificationTests extends TestBase
         Assert.assertEquals(before, after);
     }
 
-    @Test
+    @Test(enabled = false)
     public void testClearContact()
     {
-        app.getNavigationHelper().gotoHomePage();
+        app.goTo().homePage();
         if(!app.getContactHelper().isThereAContact())
         {
             ContactData cd = new ContactData("Aleksandr", "Sergeyevich", "Golovin", "Chick",
@@ -74,17 +74,17 @@ public class ContactModificationTests extends TestBase
                     "27", "July", "2018",
                     "Test3", "Kaltan, Russia", "2-10-64",
                     "He played for PFC CSKA Moscow.");
-            app.getNavigationHelper().gotoNewContactPage();
-            if(!app.getGroupHelper().isThereAGroupByName(cd.getGroupName()) && cd.getGroupName() != null)
+            app.goTo().newContactPage();
+            if(!app.group().isThereAGroupByName(cd.getGroupName()) && cd.getGroupName() != null)
             {
-                GroupData gd = new GroupData(cd.getGroupName(), null, null);
-                app.getNavigationHelper().gotoGroupPage();
-                app.getGroupHelper().createGroup(gd);
-                app.getNavigationHelper().gotoNewContactPage();
+                GroupData gd = new GroupData().withName(cd.getGroupName());
+                app.goTo().groupPage();
+                app.group().create(gd);
+                app.goTo().newContactPage();
             }
             app.getContactHelper().createContact(cd);
         }
-        app.getNavigationHelper().gotoHomePage();
+        app.goTo().homePage();
         List<ContactData> before = app.getContactHelper().getContactList();
         app.getContactHelper().initContactModification(before.size() - 1);
         ContactData cd = new ContactData("", "", "", "",
@@ -95,6 +95,6 @@ public class ContactModificationTests extends TestBase
                 "", "");
         app.getContactHelper().fillContactForm(cd, false);
         app.getContactHelper().submitContactModification();
-        app.getNavigationHelper().gotoHomePage();
+        app.goTo().homePage();
     }
 }

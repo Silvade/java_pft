@@ -8,10 +8,10 @@ import java.util.List;
 
 public class ContactDeletionTests extends TestBase
 {
-    @Test
+    @Test(enabled = false)
     public void testContactDeletion() throws Exception
     {
-        app.getNavigationHelper().gotoHomePage();
+        app.goTo().homePage();
         if(!app.getContactHelper().isThereAContact())
         {
             ContactData cd = new ContactData("Aleksandr", "Sergeyevich", "Golovin", "Chick",
@@ -23,14 +23,14 @@ public class ContactDeletionTests extends TestBase
                     "27", "July", "2018",
                     null, "Kaltan, Russia", "2-10-64",
                     "He played for PFC CSKA Moscow.");
-            app.getNavigationHelper().gotoNewContactPage();
+            app.goTo().newContactPage();
             app.getContactHelper().createContact(cd);
-            app.getNavigationHelper().gotoHomePage();
+            app.goTo().homePage();
         }
         List<ContactData> before = app.getContactHelper().getContactList();
         app.getContactHelper().selectContact(before.size() - 1);
         app.getContactHelper().deleteSelectedContacts();
-        app.getNavigationHelper().clickAlert();
+        app.goTo().clickAlert();
         List<ContactData> after = app.getContactHelper().getContactList();
         Assert.assertEquals(after.size(), before.size() - 1);
 
@@ -38,12 +38,12 @@ public class ContactDeletionTests extends TestBase
         Assert.assertEquals(before, after);
     }
 
-    @Test
+    @Test(enabled = false)
     public void testAllContactsDeletion() throws Exception
     {
-        app.getNavigationHelper().gotoHomePage();
+        app.goTo().homePage();
         app.getContactHelper().selectAllContacts();
         app.getContactHelper().deleteSelectedContacts();
-        app.getNavigationHelper().clickAlert();
+        app.goTo().clickAlert();
     }
 }

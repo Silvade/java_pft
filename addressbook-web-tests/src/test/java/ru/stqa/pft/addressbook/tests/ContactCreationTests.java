@@ -10,12 +10,12 @@ import java.util.List;
 
 public class ContactCreationTests extends TestBase
 {
-    @Test
+    @Test(enabled = false)
     public void testContactCreation() throws Exception
     {
-        app.getNavigationHelper().gotoHomePage();
+        app.goTo().homePage();
         List<ContactData> before = app.getContactHelper().getContactList();
-        app.getNavigationHelper().gotoNewContactPage();
+        app.goTo().newContactPage();
         ContactData cd = new ContactData("Aleksandr", "Sergeyevich", "Golovin", "Chick",
                 "C:\\Users\\Maria\\Pictures\\Aleksandr_Golovin.jpg",
                 "Footballer", "AS Monaco FC", "Stade Louis II, Fontvielle, Monaco",
@@ -25,16 +25,16 @@ public class ContactCreationTests extends TestBase
                 "27", "July", "2018",
                 "Test1", "Kaltan, Russia", "2-10-64",
                 "He played for PFC CSKA Moscow.");
-        if(!app.getGroupHelper().isThereAGroupByName(cd.getGroupName()) && cd.getGroupName() != null)
+        if(!app.group().isThereAGroupByName(cd.getGroupName()) && cd.getGroupName() != null)
         {
-            GroupData gd = new GroupData(cd.getGroupName(), null, null);
-            app.getNavigationHelper().gotoGroupPage();
-            app.getGroupHelper().createGroup(gd);
-            app.getNavigationHelper().gotoNewContactPage();
+            GroupData gd = new GroupData().withName(cd.getGroupName());
+            app.goTo().groupPage();
+            app.group().create(gd);
+            app.goTo().newContactPage();
         }
         app.getContactHelper().createContact(cd);
 
-        app.getNavigationHelper().gotoHomePage();
+        app.goTo().homePage();
         List<ContactData> after = app.getContactHelper().getContactList();
         Assert.assertEquals(before.size() + 1, after.size());
 
@@ -46,10 +46,10 @@ public class ContactCreationTests extends TestBase
         Assert.assertEquals(before, after);
     }
 
-    @Test
+    @Test(enabled = false)
     public void testEmptyContactCreation() throws Exception
     {
-        app.getNavigationHelper().gotoNewContactPage();
+        app.goTo().newContactPage();
         app.getContactHelper().submitContactCreation();
     }
 }
