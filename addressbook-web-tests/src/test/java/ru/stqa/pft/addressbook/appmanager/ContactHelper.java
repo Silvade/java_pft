@@ -12,21 +12,20 @@ import static java.lang.Integer.parseInt;
 
 public class ContactHelper extends BaseHelper
 {
+    private Contacts contactsCache = null;
 
     public ContactHelper(WebDriver wd)
     {
         super(wd);
     }
 
-    public void createContact(ContactData cd)
-    {
-        fillContactForm(cd, true);
-        submitContactCreation();
-    }
-
     public Contacts all()
     {
-        Contacts contacts = new Contacts();
+        if(contactsCache != null)
+        {
+            return new Contacts(contactsCache);
+        }
+        contactsCache = new Contacts();
         List<WebElement> elements = wd.findElements(By.name("entry"));
         for(WebElement e : elements)
         {
@@ -40,10 +39,10 @@ public class ContactHelper extends BaseHelper
             ContactData cd = new ContactData().withId(id).withLastName(lastName).withFirstName(firstName)
                     .withAllPhones(allPhones).withAddress(address).withAllEmails(allEmails);
 
-            contacts.add(cd);
+            contactsCache.add(cd);
         }
 
-        return contacts;
+        return new Contacts(contactsCache);
     }
 
     public void selectContactById(int id)
@@ -61,15 +60,24 @@ public class ContactHelper extends BaseHelper
         }
     }
 
+    public void createContact(ContactData cd)
+    {
+        fillContactForm(cd, true);
+        contactsCache = null;
+        submitContactCreation();
+    }
+
     public void modify(ContactData contact)
     {
         initContactModificationById(contact.getId());
         fillContactForm(contact, false);
+        contactsCache = null;
         submitContactModification();
     }
     public void delete(ContactData contact)
     {
         selectContactById(contact.getId());
+        contactsCache = null;
         deleteSelectedContacts();
     }
 
