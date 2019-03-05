@@ -20,7 +20,7 @@ public class ContactCreationTests extends TestBase
         }
     }
 
-    @Test
+    @Test(enabled = false)
     public void testContactCreation() throws Exception
     {
         app.goTo().homePage();
@@ -29,7 +29,7 @@ public class ContactCreationTests extends TestBase
                 .withPhotoPath("C:\\Users\\Maria\\Pictures\\Aleksandr_Golovin.jpg").withTitle("Footballer")
                 .withCompany("AS Monaco FC").withAddress("Stade Louis II, Fontvielle, Monaco")
                 .withHomePhone("472-890").withMobilePhone("88002253535").withWorkPhone("123456").withFax("654321")
-                .withEmail1("mail@mail.ru").withEmail2("mail1@mail.ru").withEmail3("mail2@mail.ru")
+                .withEmail("mail@mail.ru").withEmail2("mail1@mail.ru").withEmail3("mail2@mail.ru")
                 .withHomepage("www.asmonaco.com").withDayOfBirthday("30").withMonthOfBirthday("May").withYearOfBirthday("1996")
                 .withDayOfAnniversary("27").withMonthOfAnniversary("July").withYearOfAnniversary("2018")
                 .withGroupName("Test1").withAddress2("Kaltan, Russia").withPhone2("2-10-64").withNotes("He played for PFC CSKA Moscow.");

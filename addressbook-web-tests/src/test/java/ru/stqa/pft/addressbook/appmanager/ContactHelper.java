@@ -31,9 +31,14 @@ public class ContactHelper extends BaseHelper
         for(WebElement e : elements)
         {
             List<WebElement> contactData = e.findElements(By.tagName("td"));
-            ContactData cd = new ContactData()
-                    .withId(parseInt(contactData.get(0).findElement(By.tagName("input")).getAttribute("value")))
-                    .withLastName(contactData.get(1).getText()).withFirstName(contactData.get(2).getText());
+            int id = parseInt(contactData.get(0).findElement(By.tagName("input")).getAttribute("value"));
+            String lastName = contactData.get(1).getText();
+            String firstName = contactData.get(2).getText();
+            String allPhones = contactData.get(5).getText();
+            String address = contactData.get(3).getText();
+            String allEmails = contactData.get(4).getText();
+            ContactData cd = new ContactData().withId(id).withLastName(lastName).withFirstName(firstName)
+                    .withAllPhones(allPhones).withAddress(address).withAllEmails(allEmails);
 
             contacts.add(cd);
         }
@@ -91,7 +96,7 @@ public class ContactHelper extends BaseHelper
         type(By.name("mobile"), contactData.getMobilePhone());
         type(By.name("work"), contactData.getWorkPhone());
         type(By.name("fax"), contactData.getFax());
-        type(By.name("email"), contactData.getEmail1());
+        type(By.name("email"), contactData.getEmail());
         type(By.name("email2"), contactData.getEmail2());
         type(By.name("email3"), contactData.getEmail3());
         type(By.name("homepage"), contactData.getHomepage());
@@ -129,6 +134,7 @@ public class ContactHelper extends BaseHelper
 
     public void initContactModificationById(int id)
     {
+        /*
         List<WebElement> elements = wd.findElements(By.name("entry"));
         for(WebElement e : elements)
         {
@@ -141,6 +147,9 @@ public class ContactHelper extends BaseHelper
                 return;
             }
         }
+        */
+
+        wd.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s']", id))). click();
     }
 
     public void submitContactModification()
@@ -161,5 +170,25 @@ public class ContactHelper extends BaseHelper
     public boolean isThereAContact()
     {
         return isElementPresent(By.name("selected[]"));
+    }
+
+    public ContactData infoFromEditForm(ContactData cd)
+    {
+        initContactModificationById(cd.getId());
+        String firstName = wd.findElement(By.name("firstname")).getAttribute("value");
+        String lastName = wd.findElement(By.name("lastname")).getAttribute("value");
+        String home = wd.findElement(By.name("home")).getAttribute("value");
+        String mobile = wd.findElement(By.name("mobile")).getAttribute("value");
+        String work = wd.findElement(By.name("work")).getAttribute("value");
+        String phone2 = wd.findElement(By.name("phone2")).getAttribute("value");
+        String address = wd.findElement(By.name("address")).getAttribute("value");
+        String email = wd.findElement(By.name("email")).getAttribute("value");
+        String email2 = wd.findElement(By.name("email2")).getAttribute("value");
+        String email3 = wd.findElement(By.name("email3")).getAttribute("value");
+        wd.navigate().back();
+
+        return new ContactData().withFirstName(firstName).withLastName(lastName)
+                .withHomePhone(home).withMobilePhone(mobile).withWorkPhone(work).withPhone2(phone2).withAddress(address)
+                .withEmail(email).withEmail2(email2).withEmail3(email3);
     }
 }

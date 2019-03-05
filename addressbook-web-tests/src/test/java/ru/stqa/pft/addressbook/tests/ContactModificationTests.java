@@ -21,7 +21,7 @@ public class ContactModificationTests extends TestBase
                     .withPhotoPath("C:\\Users\\Maria\\Pictures\\Aleksandr_Golovin.jpg").withTitle("Footballer")
                     .withCompany("AS Monaco FC").withAddress("Stade Louis II, Fontvielle, Monaco")
                     .withHomePhone("472-890").withMobilePhone("88002253535").withWorkPhone("123456").withFax("654321")
-                    .withEmail1("mail@mail.ru").withEmail2("mail1@mail.ru").withEmail3("mail2@mail.ru")
+                    .withEmail("mail@mail.ru").withEmail2("mail1@mail.ru").withEmail3("mail2@mail.ru")
                     .withHomepage("www.asmonaco.com").withDayOfBirthday("30").withMonthOfBirthday("May").withYearOfBirthday("1996")
                     .withDayOfAnniversary("27").withMonthOfAnniversary("July").withYearOfAnniversary("2018")
                     .withAddress2("Kaltan, Russia").withPhone2("2-10-64").withNotes("He played for PFC CSKA Moscow.");
@@ -41,7 +41,7 @@ public class ContactModificationTests extends TestBase
         }
     }
 
-    @Test
+    @Test(enabled = false)
     public void testContactModification()
     {
         Contacts before = app.contact().all();
@@ -50,7 +50,7 @@ public class ContactModificationTests extends TestBase
                 .withFirstName("Fyodor").withMiddleName("Nikolayevich").withLastName("Chalov").withNickname("Esthete")
                 .withPhotoPath("C:\\Users\\Maria\\Pictures\\chalov.jpg").withCompany("PFC CSKA Moscow")
                 .withAddress("Russia, Moscow, VEB Arena").withMobilePhone("89999999999")
-                .withEmail1("f@c.ru").withHomepage("https://www.pfc-cska.com/")
+                .withEmail("f@c.ru").withHomepage("https://www.pfc-cska.com/")
                 .withDayOfBirthday("10").withMonthOfBirthday("April").withYearOfBirthday("1998")
                 .withDayOfAnniversary("21").withMonthOfAnniversary("September").withYearOfAnniversary("2016")
                 .withGroupName("Joker").withAddress2("Moscow").withNotes("The best footballer of Russia in 2017");

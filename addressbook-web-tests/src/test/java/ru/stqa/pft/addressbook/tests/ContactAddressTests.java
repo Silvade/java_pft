@@ -3,12 +3,11 @@ package ru.stqa.pft.addressbook.tests;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
-import ru.stqa.pft.addressbook.model.Contacts;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ContactDeletionTests extends TestBase
+public class ContactAddressTests extends TestBase
 {
     @BeforeMethod
     public void ensurePreconditions()
@@ -31,18 +30,13 @@ public class ContactDeletionTests extends TestBase
         }
     }
 
-    @Test(enabled = false)
-    public void testContactDeletion() throws Exception
+    @Test
+    public void testContactAddress()
     {
-        Contacts before = app.contact().all();
-        ContactData deletedContact = before.iterator().next();
-        app.contact().delete(deletedContact);
-        app.goTo().clickAlert();
         app.goTo().homePage();
-        Contacts after = app.contact().all();
+        ContactData cd = app.contact().all().iterator().next();
+        ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(cd);
 
-        assertThat(after.size(), equalTo(before.size() - 1));
-
-        assertThat(after, equalTo(before.without(deletedContact)));
+        assertThat(cd.getAddress(), equalTo(contactInfoFromEditForm.getAddress()));
     }
 }

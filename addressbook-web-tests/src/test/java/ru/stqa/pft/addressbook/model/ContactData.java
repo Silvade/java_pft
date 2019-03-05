@@ -17,7 +17,7 @@ public class ContactData
     private String mobilePhone;
     private String workPhone;
     private String fax;
-    private String email1;
+    private String email;
     private String email2;
     private String email3;
     private String homepage;
@@ -31,6 +31,8 @@ public class ContactData
     private String address2;
     private String phone2;
     private String notes;
+    private String allPhones;
+    private String allEmails;
 
     @Override
     public String toString()
@@ -107,9 +109,9 @@ public class ContactData
         return fax;
     }
 
-    public String getEmail1()
+    public String getEmail()
     {
-        return email1;
+        return email;
     }
 
     public String getEmail2()
@@ -175,6 +177,16 @@ public class ContactData
     public String getNotes()
     {
         return notes;
+    }
+
+    public String getAllPhones()
+    {
+        return allPhones;
+    }
+
+    public String getAllEmails()
+    {
+        return allEmails;
     }
 
     public ContactData withId(int id)
@@ -255,9 +267,9 @@ public class ContactData
         return this;
     }
 
-    public ContactData withEmail1(String email1)
+    public ContactData withEmail(String email)
     {
-        this.email1 = email1;
+        this.email = email;
         return this;
     }
 
@@ -333,6 +345,24 @@ public class ContactData
         return this;
     }
 
+    public ContactData withNotes(String notes)
+    {
+        this.notes = notes;
+        return this;
+    }
+
+    public ContactData withAllPhones(String allPhones)
+    {
+        this.allPhones = allPhones;
+        return this;
+    }
+
+    public ContactData withAllEmails(String allEmails)
+    {
+        this.allEmails = allEmails;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -348,11 +378,5 @@ public class ContactData
     public int hashCode()
     {
         return Objects.hash(id, firstName, lastName);
-    }
-
-    public ContactData withNotes(String notes)
-    {
-        this.notes = notes;
-        return this;
     }
 }
