@@ -6,6 +6,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.Select;
 
+import java.io.File;
+
 public class BaseHelper
 {
     protected WebDriver wd;
@@ -34,9 +36,12 @@ public class BaseHelper
         }
     }
 
-    protected void file(By locator, String text)
+    protected void attach(By locator, File file)
     {
-        wd.findElement(locator).sendKeys(text);
+        if(file != null)
+        {
+            wd.findElement(locator).sendKeys(file.getAbsolutePath());
+        }
     }
 
     protected void select(By locator, String text)

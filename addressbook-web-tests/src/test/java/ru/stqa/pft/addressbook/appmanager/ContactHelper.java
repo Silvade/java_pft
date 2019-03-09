@@ -88,11 +88,9 @@ public class ContactHelper extends BaseHelper
         type(By.name("lastname"), contactData.getLastName());
         type(By.name("nickname"), contactData.getNickname());
 
-        if(contactData.getPhotoPath() != null)
-        {
-            file(By.name("photo"), contactData.getPhotoPath());
-        }
-        else if(!creation)
+        attach(By.name("photo"), contactData.getPhoto());
+
+        if(contactData.getPhoto() == null && !creation)
         {
             click(By.name("delete_photo"));
         }

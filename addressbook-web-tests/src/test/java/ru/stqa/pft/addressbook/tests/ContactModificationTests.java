@@ -6,6 +6,8 @@ import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 
+import java.io.File;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -17,8 +19,9 @@ public class ContactModificationTests extends TestBase
         app.goTo().homePage();
         if(app.contact().all().size() == 0)
         {
+            File photo = new File("src/test/resources/Aleksandr_Golovin.jpg");
             ContactData cd = new ContactData().withFirstName("Aleksandr").withMiddleName("Sergeyevich").withLastName("Golovin").withNickname("Chick")
-                    .withPhotoPath("C:\\Users\\Maria\\Pictures\\Aleksandr_Golovin.jpg").withTitle("Footballer")
+                    .withPhoto(photo).withTitle("Footballer")
                     .withCompany("AS Monaco FC").withAddress("Stade Louis II, Fontvielle, Monaco")
                     .withHomePhone("472-890").withMobilePhone("88002253535").withWorkPhone("123456").withFax("654321")
                     .withEmail("mail@mail.ru").withEmail2("mail1@mail.ru").withEmail3("mail2@mail.ru")
@@ -41,14 +44,15 @@ public class ContactModificationTests extends TestBase
         }
     }
 
-    @Test(enabled = false)
+    @Test
     public void testContactModification()
     {
         Contacts before = app.contact().all();
         ContactData modifiedContact = before.iterator().next();
+        File photo = new File("src/test/resources/chalov.jpg");
         ContactData cd = new ContactData().withId(modifiedContact.getId())
                 .withFirstName("Fyodor").withMiddleName("Nikolayevich").withLastName("Chalov").withNickname("Esthete")
-                .withPhotoPath("C:\\Users\\Maria\\Pictures\\chalov.jpg").withCompany("PFC CSKA Moscow")
+                .withPhoto(photo).withCompany("PFC CSKA Moscow")
                 .withAddress("Russia, Moscow, VEB Arena").withMobilePhone("89999999999")
                 .withEmail("f@c.ru").withHomepage("https://www.pfc-cska.com/")
                 .withDayOfBirthday("10").withMonthOfBirthday("April").withYearOfBirthday("1998")

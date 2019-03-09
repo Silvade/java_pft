@@ -5,6 +5,8 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 
+import java.io.File;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -16,8 +18,9 @@ public class ContactDeletionTests extends TestBase
         app.goTo().homePage();
         if(app.contact().all().size() == 0)
         {
+            File photo = new File("src/test/resources/Aleksandr_Golovin.jpg");
             ContactData cd = new ContactData().withFirstName("Aleksandr").withMiddleName("Sergeyevich").withLastName("Golovin").withNickname("Chick")
-                    .withPhotoPath("C:\\Users\\Maria\\Pictures\\Aleksandr_Golovin.jpg").withTitle("Footballer")
+                    .withPhoto(photo).withTitle("Footballer")
                     .withCompany("AS Monaco FC").withAddress("Stade Louis II, Fontvielle, Monaco")
                     .withHomePhone("472-890").withMobilePhone("88002253535").withWorkPhone("123456").withFax("654321")
                     .withEmail("mail@mail.ru").withEmail2("mail1@mail.ru").withEmail3("mail2@mail.ru")
@@ -31,7 +34,7 @@ public class ContactDeletionTests extends TestBase
         }
     }
 
-    @Test(enabled = false)
+    @Test
     public void testContactDeletion() throws Exception
     {
         Contacts before = app.contact().all();
