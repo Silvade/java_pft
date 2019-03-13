@@ -34,7 +34,7 @@ public class GroupDataGenerator
         {
             jCommander.parse(args);
         }
-        catch(ParameterException e)
+        catch(ParameterException ex)
         {
             jCommander.usage();
             return;
