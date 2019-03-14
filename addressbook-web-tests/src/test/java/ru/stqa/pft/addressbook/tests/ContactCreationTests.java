@@ -1,11 +1,17 @@
 package ru.stqa.pft.addressbook.tests;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.thoughtworks.xstream.XStream;
 import org.testng.annotations.*;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 
-import java.io.File;
+import java.io.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,29 +28,55 @@ public class ContactCreationTests extends TestBase
         }
     }
 
-    @Test
-    public void testContactCreation() throws Exception
+    @DataProvider
+    public Iterator<Object[]> validContactsFromXml() throws IOException
+    {
+        BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contacts.xml")));
+        String xml = "";
+        String line = reader.readLine();
+        while(line != null)
+        {
+            xml += line;
+            line = reader.readLine();
+        }
+        reader.close();
+
+        XStream xStream = new XStream();
+        xStream.processAnnotations(ContactData.class);
+        List<ContactData> contacts = (List<ContactData>)xStream.fromXML(xml);
+        return contacts.stream().map((c) -> new Object[]{c}).collect(Collectors.toList()).iterator();
+    }
+
+    @DataProvider
+    public Iterator<Object[]> validContactsFromJson() throws IOException
+    {
+        BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contacts.json")));
+        String json = "";
+        String line = reader.readLine();
+        while(line != null)
+        {
+            json += line;
+            line = reader.readLine();
+        }
+
+        Gson gson = new Gson();
+        List<ContactData> contacts = gson.fromJson(json, new TypeToken<List<ContactData>>(){}.getType());
+        return contacts.stream().map((c) -> new Object[]{c}).collect(Collectors.toList()).iterator();
+    }
+
+    @Test(dataProvider = "validContactsFromJson")
+    public void testContactCreation(ContactData contact) throws Exception
     {
         app.goTo().homePage();
         Contacts before = app.contact().all();
-        File photo = new File("src/test/resources/Aleksandr_Golovin.jpg");
-        ContactData cd = new ContactData().withFirstName("Aleksandr").withMiddleName("Sergeyevich").withLastName("Golovin").withNickname("Chick")
-                .withPhoto(photo).withTitle("Footballer")
-                .withCompany("AS Monaco FC").withAddress("Stade Louis II, Fontvielle, Monaco")
-                .withHomePhone("472-890").withMobilePhone("88002253535").withWorkPhone("123456").withFax("654321")
-                .withEmail("mail@mail.ru").withEmail2("mail1@mail.ru").withEmail3("mail2@mail.ru")
-                .withHomepage("www.asmonaco.com").withDayOfBirthday("30").withMonthOfBirthday("May").withYearOfBirthday("1996")
-                .withDayOfAnniversary("27").withMonthOfAnniversary("July").withYearOfAnniversary("2018")
-                .withGroupName("Test1").withAddress2("Kaltan, Russia").withPhone2("2-10-64").withNotes("He played for PFC CSKA Moscow.");
-        ensurePreconditions(cd.getGroupName());
+        ensurePreconditions(contact.getGroupName());
         app.goTo().newContactPage();
-        app.contact().createContact(cd);
-
+        app.contact().createContact(contact);
         app.goTo().homePage();
         Contacts after = app.contact().all();
         assertThat(after.size(), equalTo(before.size() + 1));
 
         assertThat(after, equalTo(
-                before.withAdded(cd.withId(after.stream().mapToInt(ContactData::getId).max().getAsInt()))));
+                before.withAdded(contact.withId(after.stream().mapToInt(ContactData::getId).max().getAsInt()))));
     }
 }

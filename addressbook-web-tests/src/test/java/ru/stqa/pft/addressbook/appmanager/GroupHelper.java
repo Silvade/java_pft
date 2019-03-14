@@ -86,15 +86,21 @@ public class GroupHelper extends BaseHelper
 
     public boolean isThereAGroupByName(String name)
     {
-        try
+        List<WebElement> elements = wd.findElements(By.cssSelector("span.group"));
+        if(elements.size() > 0)
         {
-            wd.findElement(By.name("new_group")).findElement(By.xpath("//*[contains(text(), '" + name + "')]"));
-            return true;
+            for(WebElement e : elements)
+            {
+                String text = e.getText();
+
+                if(name.equals(text))
+                {
+                    return true;
+                }
+            }
         }
-        catch (NoSuchElementException e)
-        {
-            return false;
-        }
+
+        return false;
     }
 
     public int count()
