@@ -140,21 +140,6 @@ public class ContactHelper extends BaseHelper
 
     public void initContactModificationById(int id)
     {
-        /*
-        List<WebElement> elements = wd.findElements(By.name("entry"));
-        for(WebElement e : elements)
-        {
-            List<WebElement> row = e.findElements(By.tagName("td"));
-            WebElement checkbox = row.get(0).findElement(By.tagName("input"));
-
-            if(id == parseInt(checkbox.getAttribute("value")))
-            {
-                row.get(7).click();
-                return;
-            }
-        }
-        */
-
         wd.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s']", id))). click();
     }
 
