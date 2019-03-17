@@ -3,67 +3,102 @@ package ru.stqa.pft.addressbook.model;
 import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
 import java.util.Objects;
 
+@Entity
+@Table(name = "addressbook")
 @XStreamAlias("contact")
 public class ContactData
 {
+    @Id
     @XStreamOmitField
     private int id = Integer.MAX_VALUE;
     @Expose
+    @Column(name = "firstname")
     private String firstName;
     @Expose
+    @Column(name = "middlename")
     private String middleName;
     @Expose
+    @Column(name = "lastname")
     private String lastName;
     @Expose
     private String nickname;
-    private File photo;
+    @Type(type = "text")
+    private String photo;
     @Expose
     private String title;
     @Expose
     private String company;
     @Expose
+    @Type(type = "text")
     private String address;
     @Expose
+    @Column(name = "home")
+    @Type(type = "text")
     private String homePhone;
     @Expose
+    @Column(name = "mobile")
+    @Type(type = "text")
     private String mobilePhone;
     @Expose
+    @Column(name = "work")
+    @Type(type = "text")
     private String workPhone;
     @Expose
+    @Type(type = "text")
     private String fax;
     @Expose
+    @Type(type = "text")
     private String email;
     @Expose
+    @Type(type = "text")
     private String email2;
     @Expose
+    @Type(type = "text")
     private String email3;
     @Expose
+    @Type(type = "text")
     private String homepage;
     @Expose
-    private String dayOfBirthday;
+    @Column(name = "bday")
+    @Type(type = "byte")
+    private byte dayOfBirthday;
     @Expose
+    @Column(name = "bmonth")
     private String monthOfBirthday;
     @Expose
+    @Column(name = "byear")
     private String yearOfBirthday;
     @Expose
-    private String dayOfAnniversary;
+    @Column(name = "aday")
+    @Type(type = "byte")
+    private byte dayOfAnniversary;
     @Expose
+    @Column(name = "amonth")
     private String monthOfAnniversary;
     @Expose
+    @Column(name = "ayear")
     private String yearOfAnniversary;
     @Expose
+    @Transient
     private String groupName;
     @Expose
+    @Type(type = "text")
     private String address2;
     @Expose
+    @Type(type = "text")
     private String phone2;
     @Expose
+    @Type(type = "text")
     private String notes;
+    @Transient
     private String allPhones;
+    @Transient
     private String allEmails;
 
     @Override
@@ -98,7 +133,7 @@ public class ContactData
 
     public File getPhoto()
     {
-        return photo;
+        return new File(photo);
     }
 
     public int getId()
@@ -163,7 +198,7 @@ public class ContactData
 
     public String getDayOfBirthday()
     {
-        return dayOfBirthday;
+        return String.valueOf(dayOfBirthday);
     }
 
     public String getMonthOfBirthday()
@@ -178,7 +213,7 @@ public class ContactData
 
     public String getDayOfAnniversary()
     {
-        return dayOfAnniversary;
+        return String.valueOf(dayOfAnniversary);
     }
 
     public String getMonthOfAnniversary()
@@ -253,7 +288,7 @@ public class ContactData
 
     public ContactData withPhoto(File photo)
     {
-        this.photo = photo;
+        this.photo = photo.getPath();
         return this;
     }
 
@@ -325,7 +360,7 @@ public class ContactData
 
     public ContactData withDayOfBirthday(String dayOfBirthday)
     {
-        this.dayOfBirthday = dayOfBirthday;
+        this.dayOfBirthday = Byte.parseByte(dayOfBirthday);
         return this;
     }
 
@@ -343,7 +378,7 @@ public class ContactData
 
     public ContactData withDayOfAnniversary(String dayOfAnniversary)
     {
-        this.dayOfAnniversary = dayOfAnniversary;
+        this.dayOfAnniversary = Byte.parseByte(dayOfAnniversary);
         return this;
     }
 
