@@ -17,7 +17,7 @@ public class ContactModificationTests extends TestBase
     public void ensurePreconditions()
     {
         app.goTo().homePage();
-        if(app.contact().all().size() == 0)
+        if(app.db().contacts().size() == 0)
         {
             File photo = new File("src/test/resources/Aleksandr_Golovin.jpg");
             ContactData cd = new ContactData().withFirstName("Aleksandr").withMiddleName("Sergeyevich").withLastName("Golovin").withNickname("Chick")
@@ -47,22 +47,22 @@ public class ContactModificationTests extends TestBase
     @Test
     public void testContactModification()
     {
-        Contacts before = app.contact().all();
+        Contacts before = app.db().contacts();
         ContactData modifiedContact = before.iterator().next();
         File photo = new File("src/test/resources/chalov.jpg");
         ContactData cd = new ContactData().withId(modifiedContact.getId())
                 .withFirstName("Fyodor").withMiddleName("Nikolayevich").withLastName("Chalov").withNickname("Esthete")
-                .withPhoto(photo).withCompany("PFC CSKA Moscow")
-                .withAddress("Russia, Moscow, VEB Arena").withMobilePhone("89999999999")
-                .withEmail("f@c.ru").withHomepage("https://www.pfc-cska.com/")
-                .withDayOfBirthday("10").withMonthOfBirthday("April").withYearOfBirthday("1998")
+                .withPhoto(photo).withTitle("Footballer").withCompany("PFC CSKA Moscow")
+                .withAddress("Russia, Moscow, VEB Arena").withHomePhone("21063").withMobilePhone("89999999999")
+                .withWorkPhone("1234567890").withFax("100").withEmail("f@c.ru").withEmail2("f2@c.ru").withEmail3("f3c.ru")
+                .withHomepage("https://www.pfc-cska.com/").withDayOfBirthday("10").withMonthOfBirthday("April").withYearOfBirthday("1998")
                 .withDayOfAnniversary("21").withMonthOfAnniversary("September").withYearOfAnniversary("2016")
-                .withGroupName("Joker").withAddress2("Moscow").withNotes("The best footballer of Russia in 2017");
+                .withGroupName("Joker").withAddress2("Moscow").withPhone2("1-2-3").withNotes("The best footballer of Russia in 2017");
         ensurePreconditions(cd.getGroupName());
         app.goTo().homePage();
         app.contact().modify(cd);
         app.goTo().homePage();
-        Contacts after = app.contact().all();
+        Contacts after = app.db().contacts();
         assertThat(after.size(), equalTo(before.size()));
 
         assertThat(after, equalTo(before.without(modifiedContact).withAdded(cd)));

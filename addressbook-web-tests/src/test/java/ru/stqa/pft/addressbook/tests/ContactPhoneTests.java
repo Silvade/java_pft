@@ -17,7 +17,7 @@ public class ContactPhoneTests extends TestBase
     public void ensurePreconditions()
     {
         app.goTo().homePage();
-        if(app.contact().all().size() == 0)
+        if(app.db().contacts().size() == 0)
         {
             File photo = new File("src/test/resources/Aleksandr_Golovin.jpg");
             ContactData cd = new ContactData().withFirstName("Aleksandr").withMiddleName("Sergeyevich").withLastName("Golovin").withNickname("Chick")
@@ -39,7 +39,7 @@ public class ContactPhoneTests extends TestBase
     public void testContactPhones()
     {
         app.goTo().homePage();
-        ContactData cd = app.contact().all().iterator().next();
+        ContactData cd = app.db().contacts().iterator().next();
         ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(cd);
 
         assertThat(cd.getAllPhones(), equalTo(mergePhones(contactInfoFromEditForm)));

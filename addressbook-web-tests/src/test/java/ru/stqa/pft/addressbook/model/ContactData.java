@@ -133,7 +133,14 @@ public class ContactData
 
     public File getPhoto()
     {
-        return new File(photo);
+        if(photo == null)
+        {
+            return null;
+        }
+        else
+        {
+            return new File(photo);
+        }
     }
 
     public int getId()
@@ -288,7 +295,14 @@ public class ContactData
 
     public ContactData withPhoto(File photo)
     {
-        this.photo = photo.getPath();
+        if(photo == null)
+        {
+            this.photo = null;
+        }
+        else
+        {
+            this.photo = photo.getPath();
+        }
         return this;
     }
 
@@ -376,6 +390,48 @@ public class ContactData
         return this;
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContactData that = (ContactData) o;
+        return id == that.id &&
+                dayOfBirthday == that.dayOfBirthday &&
+                dayOfAnniversary == that.dayOfAnniversary &&
+                Objects.equals(firstName, that.firstName) &&
+                Objects.equals(middleName, that.middleName) &&
+                Objects.equals(lastName, that.lastName) &&
+                Objects.equals(nickname, that.nickname) &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(company, that.company) &&
+                Objects.equals(address, that.address) &&
+                Objects.equals(homePhone, that.homePhone) &&
+                Objects.equals(mobilePhone, that.mobilePhone) &&
+                Objects.equals(workPhone, that.workPhone) &&
+                Objects.equals(fax, that.fax) &&
+                Objects.equals(email, that.email) &&
+                Objects.equals(email2, that.email2) &&
+                Objects.equals(email3, that.email3) &&
+                Objects.equals(homepage, that.homepage) &&
+                Objects.equals(monthOfBirthday, that.monthOfBirthday) &&
+                Objects.equals(yearOfBirthday, that.yearOfBirthday) &&
+                Objects.equals(monthOfAnniversary.toLowerCase(), that.monthOfAnniversary.toLowerCase()) &&
+                Objects.equals(yearOfAnniversary, that.yearOfAnniversary) &&
+                Objects.equals(address2, that.address2) &&
+                Objects.equals(phone2, that.phone2) &&
+                Objects.equals(notes, that.notes);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id, firstName, middleName, lastName, nickname, title, company, address,
+                homePhone, mobilePhone, workPhone, fax, email, email2, email3, homepage,
+                dayOfBirthday, monthOfBirthday, yearOfBirthday, dayOfAnniversary, monthOfAnniversary.toLowerCase(), yearOfAnniversary,
+                address2, phone2, notes);
+    }
+
     public ContactData withDayOfAnniversary(String dayOfAnniversary)
     {
         this.dayOfAnniversary = Byte.parseByte(dayOfAnniversary);
@@ -430,20 +486,4 @@ public class ContactData
         return this;
     }
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContactData that = (ContactData) o;
-        return id == that.id &&
-                Objects.equals(firstName, that.firstName) &&
-                Objects.equals(lastName, that.lastName);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return Objects.hash(id, firstName, lastName);
-    }
 }
