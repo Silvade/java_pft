@@ -5,8 +5,6 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,13 +40,7 @@ public class ContactEmailTests extends TestBase
         ContactData cd = app.contact().all().iterator().next();
         ContactData contactInfoFromEditForm = app.contact().infoFromEditForm(cd);
 
-        assertThat(cd.getAllEmails(), equalTo(mergeEmails(contactInfoFromEditForm)));
+        assertThat(cd.getAllEmails(), equalTo(contactInfoFromEditForm.mergeEmails()));
     }
 
-    private String mergeEmails(ContactData contact)
-    {
-        return Arrays.asList(contact.getEmail(), contact.getEmail2(), contact.getEmail3())
-                .stream().filter((s) -> !s.equals(""))
-                .collect(Collectors.joining("\n"));
-    }
 }

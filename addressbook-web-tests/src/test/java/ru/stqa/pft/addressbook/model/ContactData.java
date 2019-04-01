@@ -4,10 +4,13 @@ import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import org.hibernate.annotations.Type;
+import ru.stqa.pft.addressbook.tests.ContactPhoneTests;
 
 import javax.persistence.*;
 import java.io.File;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "addressbook")
@@ -416,7 +419,7 @@ public class ContactData
                 Objects.equals(homepage, that.homepage) &&
                 Objects.equals(monthOfBirthday, that.monthOfBirthday) &&
                 Objects.equals(yearOfBirthday, that.yearOfBirthday) &&
-                Objects.equals(monthOfAnniversary.toLowerCase(), that.monthOfAnniversary.toLowerCase()) &&
+                Objects.equals(monthOfAnniversary != null ? monthOfAnniversary.toLowerCase() : null, that.monthOfAnniversary != null ? that.monthOfAnniversary.toLowerCase() : null) &&
                 Objects.equals(yearOfAnniversary, that.yearOfAnniversary) &&
                 Objects.equals(address2, that.address2) &&
                 Objects.equals(phone2, that.phone2) &&
@@ -428,8 +431,8 @@ public class ContactData
     {
         return Objects.hash(id, firstName, middleName, lastName, nickname, title, company, address,
                 homePhone, mobilePhone, workPhone, fax, email, email2, email3, homepage,
-                dayOfBirthday, monthOfBirthday, yearOfBirthday, dayOfAnniversary, monthOfAnniversary.toLowerCase(), yearOfAnniversary,
-                address2, phone2, notes);
+                dayOfBirthday, monthOfBirthday, yearOfBirthday, dayOfAnniversary, monthOfAnniversary != null? monthOfAnniversary.toLowerCase() : null,
+                yearOfAnniversary, address2, phone2, notes);
     }
 
     public ContactData withDayOfAnniversary(String dayOfAnniversary)
@@ -486,4 +489,18 @@ public class ContactData
         return this;
     }
 
+    public String mergedPhones()
+    {
+        return Arrays.asList(getHomePhone(), getMobilePhone(), getWorkPhone(), getPhone2())
+                .stream().filter((s) -> !s.equals(""))
+                .map(ContactPhoneTests::cleaned)
+                .collect(Collectors.joining("\n"));
+    }
+
+    public String mergeEmails()
+    {
+        return Arrays.asList(getEmail(), getEmail2(), getEmail3())
+                .stream().filter((s) -> !s.equals(""))
+                .collect(Collectors.joining("\n"));
+    }
 }
